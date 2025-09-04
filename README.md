@@ -1,1 +1,1 @@
-Repo for hosting simple htmls for blogs and other purposes
+A place for hosting simple blogs and other simple notices.
