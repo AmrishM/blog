@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversational RAG Chatbot - Interactive Project Summary</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F5F5F4;
+            color: #292524;
+        }
+        .arch-diagram-item {
+            border: 1px solid #D6D3D1;
+            background-color: #FFFFFF;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        .arch-diagram-item:hover, .arch-diagram-item.active {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #78716C;
+        }
+        .arch-diagram-item.active {
+            background-color: #A8A29E;
+            color: white;
+        }
+        .content-pane {
+            transition: opacity 0.5s ease-in-out;
+        }
+        .fade-in {
+            opacity: 1;
+        }
+        .fade-out {
+            opacity: 0;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-bold text-stone-800 mb-2">Conversational RAG Chatbot</h1>
+            <p class="text-lg text-stone-600 max-w-3xl mx-auto">An interactive summary of the architecture and key learnings from building a production-ready AI application. Click on any component in the diagram below to explore the project's journey- By Amrish Menjoge.</p>
+        </header>
+
+        <main class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+            <section class="lg:col-span-3">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold text-stone-800 mb-6 text-center">Interactive Architecture Explorer</h2>
+
+                    <div class="border-b border-stone-200 pb-6 mb-6">
+                        <button data-topic="overview" class="arch-diagram-item w-full">✨ Project Overview</button>
+                    </div>
+                    <div class="space-y-6">
+                        <!-- Frontend Section -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3 text-stone-700 flex items-center justify-center gap-2">🖥️ Frontend: User Interface</h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                <button data-topic="streamlit" class="arch-diagram-item">Streamlit UI</button>
+                                <button data-topic="state-management" class="arch-diagram-item">State Management</button>
+                                <button data-topic="components" class="arch-diagram-item">UI Components</button>
+                            </div>
+                        </div>
+
+                        <!-- Backend Section -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3 text-stone-700 flex items-center justify-center gap-2">⚙️ Backend: Logic & RAG Pipeline</h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                <button data-topic="langchain" class="arch-diagram-item">LangChain Core</button>
+                                <button data-topic="data-prep" class="arch-diagram-item">Data Preparation</button>
+                                <button data-topic="retrieval" class="arch-diagram-item">Retrieval Logic</button>
+                                <button data-topic="llm-integration" class="arch-diagram-item">LLM Integration</button>
+                                <button data-topic="code-flexibility" class="arch-diagram-item">Code Flexibility</button>
+                                <button data-topic="data-security" class="arch-diagram-item">Data Security</button>
+                            </div>
+                        </div>
+
+                        <!-- Deployment Section -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-3 text-stone-700 flex items-center justify-center gap-2">🚀 Deployment: Infrastructure</h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                <button data-topic="koyeb" class="arch-diagram-item">Deployment Platform</button>
+                                <button data-topic="docker" class="arch-diagram-item">Dockerfile</button>
+                                <button data-topic="ephemeral-fs" class="arch-diagram-item">Ephemeral Filesystem</button>
+                                <button data-topic="start-sh" class="arch-diagram-item">Start Script</button>
+                                <button data-topic="nginx" class="arch-diagram-item">Nginx Proxy</button>
+                                <button data-topic="performance" class="arch-diagram-item">Performance</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <aside id="content-pane-container" class="lg:col-span-2">
+                <div id="content-pane" class="bg-white p-6 rounded-lg shadow-md sticky top-8 content-pane fade-out">
+                    
+                </div>
+            </aside>
+        </main>
+        
+        <section class="mt-12">
+             <h2 class="text-3xl font-bold text-stone-800 mb-6 text-center">Technology Stack</h2>
+             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                 <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                     <h3 class="font-bold text-xl mb-2 text-stone-800">Streamlit</h3>
+                     <p class="text-stone-600">The core framework for building the interactive web user interface.</p>
+                 </div>
+                  <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                     <h3 class="font-bold text-xl mb-2 text-stone-800">LangChain</h3>
+                     <p class="text-stone-600">The primary framework for orchestrating the entire RAG pipeline, from data processing to LLM interaction.</p>
+                 </div>
+                  <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                     <h3 class="font-bold text-xl mb-2 text-stone-800">ChromaDB</h3>
+                     <p class="text-stone-600">The vector database used to store and retrieve document embeddings efficiently.</p>
+                 </div>
+                  <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                     <h3 class="font-bold text-xl mb-2 text-stone-800">Koyeb</h3>
+                     <p class="text-stone-600">The cloud platform used for deploying and hosting the containerized application.</p>
+                 </div>
+                  <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                     <h3 class="font-bold text-xl mb-2 text-stone-800">Docker</h3>
+                     <p class="text-stone-600">Used to containerize the application, defining a consistent and reproducible environment for deployment.</p>
+                 </div>
+                  <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                     <h3 class="font-bold text-xl mb-2 text-stone-800">Nginx</h3>
+                     <p class="text-stone-600">Acts as a high-performance reverse proxy to improve the stability and connection handling of the Streamlit app.</p>
+                 </div>
+             </div>
+        </section>
+
+    </div>
+
+    <script>
+        (function() {
+            const appData = {
+                overview: {
+                    title: "Project Overview",
+                    icon: "✨",
+                    content: `<p class="text-stone-600">This overview documents the journey of building a production-grade Conversational RAG Chatbot. A RAG (Retrieval-Augmented Generation) chatbot is an AI that answers questions by first finding relevant information in a specific knowledge base and then using those facts to generate a more accurate and context-aware response. The application answers questions based on both  core organizational documents and any user-uploaded files.</p><p class="mt-4 text-stone-600">The devlopment and deployment process revealed several key challenges common in modern AI application development. This interactive summary connects each component of the final architecture to the specific problem it solved. Click any component to the left to learn more.</p>`
+                },
+                'ephemeral-fs': {
+                    title: "Overcoming Ephemeral Filesystems",
+                    icon: "💾",
+                    content: `
+                        <h4 class="font-semibold text-stone-700 mb-1">The Problem:</h4>
+                        <p class="text-stone-600 mb-4">One persistent issue encountered was the 'Failed to load vector store' error. This was caused by the "ephemeral" nature of cloud containers, where data created during the build phase is not guaranteed to be writable or correctly initialized for the running application.</p>
+                        <h4 class="font-semibold text-stone-700 mb-1">The Solution: The "Bake and Copy" Pattern</h4>
+                        <p class="text-stone-600 mb-4">The Dockerfile now "bakes" a read-only database during the build. At runtime, a start.sh script copies this baked database into a writable temporary directory for the live app to use.</p>
+                        <h4 class="font-semibold text-stone-700 mb-1">Key Learning:</h4>
+                        <p class="text-stone-600">Cloud deployments require a clear separation between the read-only application image and writable runtime data. The "bake and copy" pattern is a robust way to manage stateful components like databases.</p>
+                    `
+                },
+                performance: {
+                    title: "Optimizing Performance",
+                    icon: "⚡",
+                    content: `
+                        <h4 class="font-semibold text-stone-700 mb-1">The Problem:</h4>
+                        <p class="text-stone-600 mb-4">The application was very slow to start up on the cloud platform. This "cold start" was caused by the need to download the embedding model from the internet every time the instance woke up.</p>
+                        <h4 class="font-semibold text-stone-700 mb-1">The Solution: Model Prefetching</h4>
+                        <p class="text-stone-600 mb-4">The Dockerfile was updated to include a build step that downloads and caches the sentence-transformers embedding model directly into the container image. This means the model is already present when the app starts.</p>
+                        <h4 class="font-semibold text-stone-700 mb-1">Key Learning:</h4>
+                        <p class="text-stone-600">For production environments, pre-baking large assets like machine learning models into the container image can be crucial for reducing startup times and improving the user experience.</p>
+                    `
+                },
+                nginx: {
+                    title: "Improving Connection Stability",
+                    icon: "🌐",
+                    content: `
+                        <h4 class="font-semibold text-stone-700 mb-1">The Problem:</h4>
+                        <p class="text-stone-600 mb-4">Interactive widgets like buttons and file uploaders were being unreliable in the deployed environment, failing to trigger updates correctly. This pointed to issues with the underlying websocket connection.</p>
+                        <h4 class="font-semibold text-stone-700 mb-1">The Solution: Nginx as a Reverse Proxy</h4>
+                        <p class="text-stone-600 mb-4">An Nginx web server was added to the container. It acts as a reverse proxy, sitting in front of the Streamlit application to manage incoming web traffic. This is a more stable and production-ready setup for handling connections.</p>
+                        <h4 class="font-semibold text-stone-700 mb-1">Key Learning:</h4>
+                        <p class="text-stone-600">Using a dedicated web server like Nginx in front of a Python web framework like Streamlit improves the stability, security, and performance of connection handling, especially for interactive applications.</p>
+                    `
+                },
+                'state-management': {
+                    title: "Robust State Management in Streamlit",
+                    icon: "🔄",
+                    content: `
+                        <h4 class="font-semibold text-stone-700 mb-1">The Problem:</h4>
+                        <p class="text-stone-600 mb-4">The typical Streamlit interactive elements such as buttons, which modify the application's state, did not work reliably on the deployed app, leading to a confusing user experience.</p>
+                        <h4 class="font-semibold text-stone-700 mb-1">The Solution: Using \`on_click\` Callbacks</h4>
+                        <p class="text-stone-600 mb-4">The application code was refactored to use Streamlit's recommended \`on_click\` parameter for all state-changing buttons. This ensures that the state-clearing logic is executed cleanly before the app automatically reruns.</p>
+                        <h4 class="font-semibold text-stone-700 mb-1">Key Learning:</h4>
+                        <p class="text-stone-600">The \`on_click\` method is the most reliable way to handle state changes in Streamlit. It prevents race conditions and unpredictable behavior that can occur with simple \`if st.button()\` checks in a deployed production environment.</p>
+                    `
+                },
+                'code-flexibility': {
+                    title: "Flexible and Resilient Code",
+                    icon: "🔧",
+                    content: `
+                        <h4 class="font-semibold text-stone-700 mb-1">The Problem:</h4>
+                        <p class="text-stone-600 mb-4">The application was initially hard-coded to a specific LLM model from the LLM providers one of which was later decommissioned by the provider, breaking the app. The data pipeline was also not resilient to database corruption.</p>
+                        <h4 class="font-semibold text-stone-700 mb-1">The Solution: Configuration Dictionaries & Validation</h4>
+                        <p class="text-stone-600 mb-4">A central 'MODELS' dictionary was created in main application logic to define all supported LLMs, making it easy to update and stay in sync with latest open source LLM models. Additionally, the data preparation script was enhanced with functions to validate the database file and stamp it with a version, preventing mismatches.</p>
+                        <h4 class="font-semibold text-stone-700 mb-1">Key Learning:</h4>
+                        <p class="text-stone-600">Abstracting configuration (like model IDs) away from application logic is essential for maintainability. Writing defensive code that validates its own state is crucial for preventing runtime errors.</p>
+                    `
+                },
+                'data-security': {
+                    title: "Is this Architecture Secure for User or SMB Data?",
+                    icon: "🛡️",
+                    content: `
+                        <h4 class="font-semibold text-stone-700 mb-1">The Problem:</h4>
+                        <p class="text-stone-600 mb-4">How can we ensure user data remains secure when the architecture relies on external, third-party AI services for its core logic?</p>
+                        <h4 class="font-semibold text-stone-700 mb-1">The Analysis & Solution:</h4>
+                        <p class="text-stone-600 mb-4">The application is secure for most use cases. Data is encrypted in transit (HTTPS) and user files at rest are ephemeral, meaning they are deleted after each session. The critical caveat is that chunks of user data are sent to the third-party LLM provider (e.g., OpenAI, Groq).</p>
+                        <p class="text-stone-600 mb-4">For maximum security with sensitive data, the solution is to replace the public API call with a private LLM endpoint, either by self-hosting an open-source model or using a private cloud service like Azure OpenAI or AWS Bedrock.</p>
+                        <h4 class="font-semibold text-stone-700 mb-1">Key Learning:</h4>
+                        <p class="text-stone-600">In a RAG architecture, true data security hinges on the final step. While the immediate infrastructure is secure, the privacy level of the LLM provider must always match the sensitivity of the customer's data.Some examples of highly sensitive data or those requiring higher level of compliance: Health data, financial data, highly sensitive intellectual property</p>
+                    `
+                },
+                streamlit: {
+                    title: "Frontend: Streamlit",
+                    icon: "🖥️",
+                    content: `<p class="text-stone-600">Streamlit is the core framework used to build the entire interactive user interface. It allows for rapid development of data-centric web applications directly in Python.</p>`
+                },
+                components: {
+                    title: "Frontend: UI Components",
+                    icon: "🧩",
+                    content: `<p class="text-stone-600">The interface is built with several key Streamlit components: \`st.sidebar\` for controls, \`st.selectbox\` for model selection, \`st.file_uploader\` for handling user documents, and \`st.chat_message\` to create the conversational display.</p>`
+                },
+                langchain: {
+                    title: "Backend: LangChain Core",
+                    icon: "⚙️",
+                    content: `<p class="text-stone-600">LangChain is the primary framework for orchestrating the entire RAG pipeline. It provides the building blocks for creating chains that handle history-aware retrieval and question-answering based on provided context.</p>`
+                },
+                'data-prep': {
+                    title: "Backend: Data Preparation",
+                    icon: "📚",
+                    content: `<p class="text-stone-600">A dedicated data preparation script is responsible for the initial data processing. It loads the source/reference documents, splits them into manageable chunks, creates vector embeddings using HuggingFaceEmbeddings, and stores them in a persistent Chroma database.</p>`
+                },
+                retrieval: {
+                    title: "Backend: Retrieval Logic",
+                    icon: "🔍",
+                    content: `<p class="text-stone-600">The application uses an advanced retrieval strategy. A 'history_aware_retriever' first reformulates the user's question based on chat history. An 'EnsembleRetriever' is then used to combine search results from both the base reference data and any user-uploaded files.</p>`
+                },
+                'llm-integration': {
+                    title: "Backend: LLM Integration",
+                    icon: "🤖",
+                    content: `<p class="text-stone-600">The application connects to external LLM providers like Groq and OpenAI via their respective APIs. The 'MODELS' dictionary in the main application code allows for flexible selection of different models, making the app adaptable to changes in the AI landscape.</p>`
+                },
+                koyeb: {
+                    title: "Deployment: Koyeb Platform",
+                    icon: "☁️",
+                    content: `<p class="text-stone-600">Koyeb cloud platform used to deploy, host, and serve the application. It provides the compute resources (CPU and RAM) and manages the deployment process from the GitHub repository. Koyeb is one of the several service providers in this space. Render, Fly.io, DigitalOcean App Platform and Railway are some other alternatives. Each platform has their own strength in terms of simplicity, bandwidth tiers, developer experience, pricing etc.</p>`
+                },
+                docker: {
+                    title: "Deployment: Dockerfile",
+                    icon: "📦",
+                    content: `<p class="text-stone-600">The 'Dockerfile' is the blueprint for creating the container that runs the application. It defines the operating system, system dependencies, Python packages, model prefetching steps, and file permissions, ensuring a consistent and reproducible environment.</p>`
+                },
+                'start-sh': {
+                    title: "Deployment: Start Script",
+                    icon: "▶️",
+                    content: `<p class="text-stone-600">A start.sh shell script acts as the container's entrypoint. It performs crucial runtime tasks, including copying the 'baked' database to a writable location and then starting both the Streamlit application and the Nginx server.</p>`
+                }
+            };
+
+            let currentTopic = 'overview';
+            let activeElement = null;
+
+            const contentPane = document.getElementById('content-pane');
+            const buttons = document.querySelectorAll('.arch-diagram-item');
+
+            function renderContent() {
+                const data = appData[currentTopic];
+                if (!data) return;
+                
+                contentPane.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    contentPane.innerHTML = `
+                        <div class="flex items-start gap-4">
+                            <div class="text-3xl">${data.icon}</div>
+                            <div>
+                                <h3 class="text-xl font-bold text-stone-800 mb-4">${data.title}</h3>
+                                <div class="space-y-4">${data.content}</div>
+                            </div>
+                        </div>
+                    `;
+                    contentPane.classList.remove('fade-out');
+                }, 200);
+            }
+
+            function handleButtonClick(event) {
+                currentTopic = event.currentTarget.dataset.topic;
+                
+                if (activeElement) {
+                    activeElement.classList.remove('active');
+                }
+                activeElement = event.currentTarget;
+                activeElement.classList.add('active');
+                
+                renderContent();
+            }
+
+            function init() {
+                buttons.forEach(button => {
+                    button.addEventListener('click', handleButtonClick);
+                });
+                
+                // Set initial state and highlight the overview button
+                const overviewButton = document.querySelector('button[data-topic="overview"]');
+                if (overviewButton) {
+                    activeElement = overviewButton;
+                    activeElement.classList.add('active');
+                }
+                renderContent();
+            }
+
+            document.addEventListener('DOMContentLoaded', init);
+        })();
+    </script>
+</body>
+</html>
+
