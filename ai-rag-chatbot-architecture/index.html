@@ -224,9 +224,9 @@
                         <p class="text-stone-600 mb-4">How can we ensure user data remains secure when the architecture relies on external, third-party AI services for its core logic?</p>
                         <h4 class="font-semibold text-stone-700 mb-1">The Analysis & Solution:</h4>
                         <p class="text-stone-600 mb-4">The application is secure for most use cases. Data is encrypted in transit (HTTPS) and user files at rest are ephemeral, meaning they are deleted after each session. The critical caveat is that chunks of user data are sent to the third-party LLM provider (e.g., OpenAI, Groq).</p>
-                        <p class="text-stone-600 mb-4">For maximum security with sensitive data, the solution is to replace the public API call with a private LLM endpoint, either by self-hosting an open-source model or using a private cloud service like Azure OpenAI or AWS Bedrock.</p>
+                        <p class="text-stone-600 mb-4">For maximum security with sensitive data, the solution is to replace the public API call with a private LLM endpoint, either by self-hosting an open-source model or using a private cloud service like Azure OpenAI or AWS Bedrock. Some examples of sensitive data or those requiring higher level of compliance: Health data, financial data, highly sensitive intellectual property.</p>
                         <h4 class="font-semibold text-stone-700 mb-1">Key Learning:</h4>
-                        <p class="text-stone-600">In a RAG architecture, true data security hinges on the final step. While the immediate infrastructure is secure, the privacy level of the LLM provider must always match the sensitivity of the customer's data.Some examples of highly sensitive data or those requiring higher level of compliance: Health data, financial data, highly sensitive intellectual property</p>
+                        <p class="text-stone-600">In a RAG architecture, true data security hinges on the final step. While the immediate infrastructure is secure, the privacy level of the LLM provider must always match the sensitivity of the customer's data.</p>
                     `
                 },
                 streamlit: {
