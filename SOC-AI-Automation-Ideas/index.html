@@ -162,13 +162,31 @@
             margin-top: 0;
         }
 
+        #summary-panel {
+            border-top: 2px solid #3f51b5;
+            padding-top: 10px;
+            flex-shrink: 0; /* Prevents summary from shrinking */
+        }
+
+        #summary-panel ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        #summary-panel li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        #summary-panel li:last-child {
+            border-bottom: none;
+        }
+
     </style>
 </head>
 <body>
 
     <div id="mindmap-container">
         <div id="header">
-            <h1>Cybersecurity: Agentic AI Ideas -By Amrish Menjoge</h1>
+            <h1>Cybersecurity: Agentic AI Opportunities - By Amrish Menjoge</h1>
         </div>
         <svg id="mindmap"></svg>
     </div>
@@ -180,6 +198,7 @@
                 <p>Click on any node in the mind map to learn more about the role and potential AI agent assistants.</p>
             </div>
         </div>
+        <div id="summary-panel"></div>
     </div>
 
 <script>
@@ -242,7 +261,7 @@
     const svg = d3.select("#mindmap")
         .attr("viewBox", [0, 0, width, height])
         .append("g")
-        .attr("transform", `translate(${width * 0.2}, 50)`);
+        .attr("transform", `translate(${width * 0.2}, 120)`); // Increased Y-offset to move chart down
 
     const typeColors = {
         'root': '#1a237e', 'category': '#3f51b5',
@@ -290,7 +309,7 @@
         // Adjust viewbox to fit the tree
         const svgNode = d3.select("#mindmap").node();
         const newHeight = right.x - left.x + 100; // Add some padding
-        svg.attr("transform", `translate(${width * 0.2}, ${-left.x + 50})`);
+        svg.attr("transform", `translate(${width * 0.2}, ${-left.x + 120})`); // Increased Y-offset here too
 
 
         const transition = svg.transition().duration(duration);
@@ -305,6 +324,7 @@
             .attr("fill-opacity", 0)
             .attr("stroke-opacity", 0)
             .on("click", (event, d) => {
+                event.stopPropagation(); // Prevent the background click from firing
                 selectedNode = d;
                 click(d);
                 updateInfoPanel(d.data.data);
@@ -439,7 +459,53 @@
         }
     }
     
+    function createSummary() {
+        const summaryPanel = document.getElementById('summary-panel');
+        const agents = flatData.filter(d => d.type === 'agent');
+
+        let agentListHtml = '<ul>';
+        agents.forEach(agent => {
+            const role = flatData.find(r => r.id === agent.parentId);
+            agentListHtml += `<li><strong>${agent.name.replace('AI: ', '')}</strong> (for ${role.name})</li>`;
+        });
+        agentListHtml += '</ul>';
+
+        const summaryHtml = `
+            <div class="accordion-item">
+                <button class="accordion-button" id="summary-toggle">AI Agent Summary</button>
+                <div class="accordion-content" id="summary-content">
+                    ${agentListHtml}
+                </div>
+            </div>
+        `;
+
+        summaryPanel.innerHTML = summaryHtml;
+
+        // Add event listener for the new accordion
+        document.getElementById('summary-toggle').addEventListener('click', function() {
+            this.classList.toggle('active');
+            const content = document.getElementById('summary-content');
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+    }
+
     update(root);
+    createSummary();
+
+    // Add a click handler to the SVG background to reset the info panel
+    d3.select("#mindmap").on("click", () => {
+        selectedNode = null;
+        svg.selectAll('g.node circle').style('stroke', null).style('stroke-width', '2px');
+        panel.innerHTML = `
+            <div class="placeholder">
+                <h2>Welcome!</h2>
+                <p>Click on any node in the mind map to learn more about the role and potential AI agent assistants.</p>
+            </div>`;
+    });
 </script>
 
 </body>
